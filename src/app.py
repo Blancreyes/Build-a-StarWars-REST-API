@@ -37,13 +37,13 @@ def sitemap():
     return generate_sitemap(app)
 
 @app.route('/user', methods=['GET'])
-def handle_hello():
+def all_users_info():
     #Query para regresar la info de todos los user
     users_query=User.query.all()
     result=list(map(lambda item: item.serialize(), users_query))
     
     response_body = {
-        "msg": "Hello, this is your GET /user response ",
+        "msg": "OK",
         "result":result
     }
 
