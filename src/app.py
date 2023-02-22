@@ -38,9 +38,26 @@ def sitemap():
 
 @app.route('/user', methods=['GET'])
 def handle_hello():
-
+    #Query para regresar la info de todos los user
+    users_query=User.query.all()
+    result=list(map(lambda item: item.serialize(), users_query))
+    
     response_body = {
-        "msg": "Hello, this is your GET /user response "
+        "msg": "Hello, this is your GET /user response ",
+        "result":result
+    }
+
+    return jsonify(response_body), 200
+
+@app.route('/user/<int:user_id>', methods=['GET'])
+def get_user_info(user_id):
+
+    #Query para regresar la info de user especifico
+    user_info_query = User.query.filter_by(id=user_id).first()
+        
+    response_body = {
+        "msg": "OK",
+        "result":user_info_query.serialize()
     }
 
     return jsonify(response_body), 200
