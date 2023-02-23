@@ -28,7 +28,7 @@ class Character(db.Model):
     # Notice that each db.Column is also a normal Python instance attribute.
     id = db.Column(db.Integer, primary_key=True)
     character_name = db.Column(db.String(250))
-    character_birth_year = db.Column(db.Integer)
+    character_birth_year = db.Column(db.String(250))
     hair_color = db.Column(db.String(250))
     height = db.Column(db.Integer)
     gender = db.Column(db.String(250))
