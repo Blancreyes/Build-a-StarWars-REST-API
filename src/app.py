@@ -9,11 +9,6 @@ from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
 from models import db, User, Character, Planets
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
-#from models import Person
 
 
 app = Flask(__name__)
@@ -195,26 +190,6 @@ def all_planet_info():
     }
 
     return jsonify(response_body), 200
-
-# Create a route to authenticate your users and return JWTs. The
-# create_access_token() function is used to actually generate the JWT.
-@app.route("/login", methods=["POST"])
-def login():
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
-
-    user= User.query.filter_by(email=email).first()
-
-    if user is None:
-        return jsonify({"msg": "User desn´t exist"}), 404
-
-    access_token = create_access_token(identity=email)
-    return jsonify(access_token=access_token)
-
-# Setup the Flask-JWT-Extended extension
-app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
-jwt = JWTManager(app)
-
 
 
 # this only runs if `$ python src/app.py` is executed
