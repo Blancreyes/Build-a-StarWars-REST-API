@@ -3,11 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
     surname = db.Column(db.String(250), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
+    favorites = db.relationship("Favorites", backref="user", lazy=True)
     # is_active = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
@@ -18,7 +20,8 @@ class User(db.Model):
             "id": self.id,
             "name":self.name,
             "surname":self.surname,
-            "email": self.email
+            "email": self.email,
+            "favorites": self.favorites
             # do not serialize the password, its a security breach
         }
 
@@ -33,6 +36,7 @@ class Character(db.Model):
     height = db.Column(db.Integer)
     gender = db.Column(db.String(250))
     mass = db.Column(db.Integer)
+    favorites = db.relationship("Favorites", backref="character", lazy=True)
 
 
     def __repr__(self):
@@ -46,7 +50,8 @@ class Character(db.Model):
             "hair_color": self.hair_color,
             "height":self.height,
             "gender":self.gender,
-            "mass": self.mass
+            "mass": self.mass,
+            "favorites": self.favorites
         }
 
 class Planets(db.Model):
@@ -59,6 +64,7 @@ class Planets(db.Model):
     population = db.Column(db.Integer)
     orbital_period = db.Column(db.Integer)
     diameter = db.Column(db.Integer)
+    favorites = db.relationship("Favorites", backref='planets', lazy=True)
 
     def __repr__(self):
         return '<Planets %r>' % self.id
@@ -71,15 +77,25 @@ class Planets(db.Model):
             "population": self.population,
             "orbital_period":self.orbital_period,
             "diameter":self.diameter,
+            "favorites": self.favorites
             }
 
-# class Vehicles(db.Model):
-#     __tablename__ = 'vehicles'
-#     # Here we define columns for the table address.
-#     # Notice that each column is also a normal Python instance attribute.
-#     id = db.Column(db.Integer, primary_key=True)
-#     planet_name = db.Column(db.String(250))
-#     climate = db.Column(db.String(250))
-#     population = db.Column(db.Integer)
-#     orbital_period = db.Column(db.Integer)
-#     diameter = db.Column(db.Integer)
+class Favorites(db.Model):
+    __tablename__ = 'favorites'
+    # # Here we define columns for the table address.
+    # Notice that each column is also a normal Python instance attribute.
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    planets_id = db.Column(db.Integer, db.ForeignKey("planets.id") , nullable=False)
+    character_id = db.Column(db.Integer, db.ForeignKey("character.id") , nullable=False)
+
+    def __repr__(self):
+        return '<Favorites %r>' % self.id
+
+    def serialize(self):
+        return {
+                "id":self.id,
+                "user":self.user_id,
+                "planets":self.planets_id,
+                "character":self.character_id
+            }
