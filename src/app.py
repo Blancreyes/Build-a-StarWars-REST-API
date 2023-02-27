@@ -229,6 +229,44 @@ def create_character_favorite(character_id):
     }
     return jsonify(response_body), 200
 
+@app.route('/favorites/planets/<int:planets_id>', methods=['DELETE'])
+def delete_planets_favorite(planets_id):
+    
+    request_body=request.json
+    # favorites_info_query=Favorites.query.filter_by(user=request_body["user"]).first()
+
+    favorite_planet_query=Favorites.query.filter_by(user_id=request_body["user"]).first()
+    
+
+    # if favorite_info_query is None:
+    db.session.delete(favorite_planet_query)
+    db.session.commit()
+    response_body = {
+        "msg": "Favorite deleted", 
+    }
+    return jsonify(response_body), 200
+
+
+@app.route('/favorites/character/<int:character_id>', methods=['DELETE'])
+def delete_character_favorite(character_id):
+    
+    request_body=request.json
+    # favorites_info_query=Favorites.query.filter_by(user=request_body["user"]).first()
+
+    favorite_character_query=Favorites.query.filter_by(user_id=request_body["user"]).first()
+    
+
+    # if favorite_info_query is None:
+    db.session.delete(favorite_character_query)
+    db.session.commit()
+    response_body = {
+        "msg": "Favorite deleted", 
+    }
+    return jsonify(response_body), 200
+
+
+
+
 
 # @app.route('/favorites/<int:favorites_id>', methods=['GET'])
 # def get_favorite_info(favorites_id):
