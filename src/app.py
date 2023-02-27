@@ -195,7 +195,6 @@ def all_planet_info():
 def create_favorite(planets_id):
     
     request_body=request.json
-    # favorites_info_query=Favorites.query.filter_by(user=request_body["user"]).first()
 
     # if favorite_info_query is None:
     favorites = Favorites(
@@ -235,7 +234,7 @@ def delete_planets_favorite(planets_id):
     request_body=request.json
     # favorites_info_query=Favorites.query.filter_by(user=request_body["user"]).first()
 
-    favorite_planet_query=Favorites.query.filter_by(user_id=request_body["user"]).first()
+    favorite_planet_query=Favorites.query.filter_by(user_id=request_body["user"], planets_id=planets_id).first()
     
 
     # if favorite_info_query is None:
@@ -253,7 +252,7 @@ def delete_character_favorite(character_id):
     request_body=request.json
     # favorites_info_query=Favorites.query.filter_by(user=request_body["user"]).first()
 
-    favorite_character_query=Favorites.query.filter_by(user_id=request_body["user"]).first()
+    favorite_character_query=Favorites.query.filter_by(user_id=request_body["user"],id=character_id).first()
     
 
     # if favorite_info_query is None:
@@ -263,34 +262,6 @@ def delete_character_favorite(character_id):
         "msg": "Favorite deleted", 
     }
     return jsonify(response_body), 200
-
-
-
-
-
-# @app.route('/favorites/<int:favorites_id>', methods=['GET'])
-# def get_favorite_info(favorites_id):
-#     favorite_info_query=Favorites.query.filter_by(id=favorites_id).first()
-
-#     response_body={
-#         "msg":"OK",
-#         "result":favorite_info_query.serialize()
-#     }
-
-#     return jsonify(response_body), 200
-
-# @app.route('/favorites', methods=['GET'])
-# def all_favorites_info():
-#     #Query para regresar la info de todos los characters
-#     favorites_query=Favorites.query.all()
-#     result=list(map(lambda item: item.serialize(), favorites_query))
-    
-#     response_body = {
-#         "msg": "OK",
-#         "result":result
-#     }
-
-#     return jsonify(response_body), 200
 
 
 # this only runs if `$ python src/app.py` is executed
