@@ -86,8 +86,8 @@ class Favorites(db.Model):
     # Notice that each column is also a normal Python instance attribute.
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    planets_id = db.Column(db.Integer, db.ForeignKey("planets.id") , nullable=False)
-    character_id = db.Column(db.Integer, db.ForeignKey("character.id") , nullable=False)
+    planets_id = db.Column(db.Integer, db.ForeignKey("planets.id") , nullable=True)
+    character_id = db.Column(db.Integer, db.ForeignKey("character.id") , nullable=True)
 
     def __repr__(self):
         return '<Favorites %r>' % self.id

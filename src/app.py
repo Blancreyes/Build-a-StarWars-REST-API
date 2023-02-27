@@ -191,8 +191,8 @@ def all_planet_info():
 
     return jsonify(response_body), 200
 
-@app.route('/favorites', methods=['POST'])
-def create_favorite():
+@app.route('/favorites/planets/<int:planets_id>', methods=['POST'])
+def create_favorite(planets_id):
     
     request_body=request.json
     # favorites_info_query=Favorites.query.filter_by(user=request_body["user"]).first()
@@ -200,8 +200,7 @@ def create_favorite():
     # if favorite_info_query is None:
     favorites = Favorites(
         user_id=request_body["user"],
-        planets_id=request_body['planets'],
-        character_id=request_body['character']
+        planets_id=planets_id
         )
     db.session.add(favorites)
     db.session.commit()
@@ -212,29 +211,48 @@ def create_favorite():
     # else: 
     #     return jsonify("This Favorite already exists"), 400
 
-@app.route('/favorites/<int:favorites_id>', methods=['GET'])
-def get_favorite_info(favorites_id):
-    favorite_info_query=Favorites.query.filter_by(id=favorites_id).first()
-
-    response_body={
-        "msg":"OK",
-        "result":favorite_info_query.serialize()
-    }
-
-    return jsonify(response_body), 200
-
-@app.route('/favorites', methods=['GET'])
-def all_favorites_info():
-    #Query para regresar la info de todos los characters
-    favorites_query=Favorites.query.all()
-    result=list(map(lambda item: item.serialize(), favorites_query))
+@app.route('/favorites/character/<int:character_id>', methods=['POST'])
+def create_character_favorite(character_id):
     
-    response_body = {
-        "msg": "OK",
-        "result":result
-    }
+    request_body=request.json
+    # favorites_info_query=Favorites.query.filter_by(user=request_body["user"]).first()
 
+    # if favorite_info_query is None:
+    favorites = Favorites(
+        user_id=request_body["user"],
+        character_id=character_id
+        )
+    db.session.add(favorites)
+    db.session.commit()
+    response_body = {
+        "msg": "Favorite added", 
+    }
     return jsonify(response_body), 200
+
+
+# @app.route('/favorites/<int:favorites_id>', methods=['GET'])
+# def get_favorite_info(favorites_id):
+#     favorite_info_query=Favorites.query.filter_by(id=favorites_id).first()
+
+#     response_body={
+#         "msg":"OK",
+#         "result":favorite_info_query.serialize()
+#     }
+
+#     return jsonify(response_body), 200
+
+# @app.route('/favorites', methods=['GET'])
+# def all_favorites_info():
+#     #Query para regresar la info de todos los characters
+#     favorites_query=Favorites.query.all()
+#     result=list(map(lambda item: item.serialize(), favorites_query))
+    
+#     response_body = {
+#         "msg": "OK",
+#         "result":result
+#     }
+
+#     return jsonify(response_body), 200
 
 
 # this only runs if `$ python src/app.py` is executed
